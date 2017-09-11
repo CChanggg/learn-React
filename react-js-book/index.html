@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>点赞组件</title>
+</head>
+<body>
+    <div class='wrapper'>
+
+    </div>
+  </body>
+  <script>
+//   const button = document.querySelector('.like-btn')
+//   const buttonText = button.querySelector('.like-text')
+//   let isLiked = false 
+//   button.addEventListener('click',() => {
+//       isLiked = !isLiked
+//       if(isLiked) {
+//           buttonText.innerHTML = '取消'
+//       }else{
+//           buttonText.innerHTML = '点赞'
+//       }
+//   },false)
+// 缺点？ DOM化 底层 
+// 去DOM化 去构建一个虚拟DOM节点 在react里就是由react react-dom
+// 利用组件化实现复用 
+// 类化 <==> React|Vue.Component
+// .vue .jsx 方便性强于一般的类化
+// 事件？
+
+
+// const createDOMFromString = (domString) => {
+//     const div = document.createElement('div')
+//     div.innerHTML = domString
+//     return div
+// }
+// DOM 节点的部分更新 界面就产生了状态 
+// hot-reload 不是dom的更新(涉及到重排和重绘)而是虚拟DOM(在内存之中)的更新 会在一定的更新之后，同步到DOM的结点
+// class LikeButton {
+//     constructor (){
+//         this.state = {
+//             isLike: false
+//         }
+//     }
+//     render() {
+//         this.el = createDOMFromString(`
+//             <button id='like-btn'>
+//                 <span class="like-text">${this.state.isLiked?'取消':'点赞'}</span>
+//                 <span>👍</span>
+//             </button>
+//         `)
+//          this.el.addEventListener('click', this.changeLikeText.bind(this), false)
+//       return this.el
+//     }
+//     //只要调用 setState，组件就会重新渲染
+//     setState (state) {
+//       this.state = state
+//       const oldEl = this.el
+//       // new el
+//       this.el = this.render()
+//       if(this.onStateChange)
+//       this.onStateChange(oldEl,this.el)
+//     }
+//     changeLikeText () {
+//         // 状态改变 -> 界面也跟着变？
+//         // 再执行一次render
+//         this.setState({
+//           isLiked: !this.state.isLiked
+//         })
+//       }
+    
+// }
+// const wrapper = document.querySelector('.wrapper')
+// const likeButton1 = new LikeButton()
+// wrapper.appendChild(likeButton1.render())// 第一次插入 DOM 元素
+// // 老的结点还在dom上，新的结点已经准备好，没有挂载上去
+// likeButton1.onStateChange =(oldEl,newEl) => {
+//     wrapper.insertBefore(newEl,oldEl)
+//     wrapper.removeChild(oldEl)
+// }
+const createDOMFromString = (domString) => {
+    const div = document.createElement('div')
+    div.innerHTML = domString
+    return div
+}
+//其实就是把组件的 DOM 元素插入页面，并且在 setState 的时候更新页面
+const mount = (component, wrapper) => {
+    wrapper.appendChild(
+        component._renderDOM()
+    )
+    component.onStateChange =
+     (oldEl, newEl) => {
+        wrapper.insertBefore(newEl, oldEl)
+        wrapper.removeChild(oldEl)
+    }
+}
+class Component {
+    constructor (props = {}) {
+        this.props = props
+    }
+    setState (state) {
+        const oldEl = this.el
+        this.state = state
+        this.el = this._renderDOM()
+        // 动态语言 运行过程中动态添加方法或属性
+        if(this.onStateChange) {
+            this.onStateChange(oldEl, this.el)
+        }
+    }
+    _renderDOM () {
+        // 子类， 一定得提供render方法
+        // render解放 UI html
+        this.el = createDOMFromString(
+            this.render()
+        )
+        if(this.onClick) {
+            this.el.addEventListener('click', this.onClick.bind(this), false)
+        }
+        return this.el
+    }
+}
+
+class LikeButton extends Component {
+   constructor (props) {
+       super(props)
+       this.state = {
+           isLiked: false
+       }
+   } 
+   onClick () {
+       this.setState({
+           isLiked: !this.state.isLiked
+       })
+   }
+   render () {
+       return `
+        <button id='like-btn' style="background-color:${this.props.bgColor}">
+            <span class="like-text">${this.state.isLiked?'取消':'点赞'}</span>
+            <span>👍</span>
+        </button>
+       `
+   }
+}
+
+mount(new LikeButton({bgColor: 'grey'}),document.querySelector('.wrapper'))
+
+  </script>
+</html>
