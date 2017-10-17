@@ -1,0 +1,17 @@
+// typescript 编译配置文件
+{
+    "compilerOptions":{
+        "target": "es6",
+        "module": "es6",
+        "moduleResolution": "node",
+        "declaration": false,
+        "onImplicitAny": false,
+        "sourceMap": true,
+        "jsx": "react",
+        "noLib": false
+    },
+    "compileOnSave": false,
+    "exclude": [
+        "node_modules"
+    ]
+}
