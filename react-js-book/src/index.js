@@ -4,64 +4,68 @@ import './index.css';
 // import App from './App';
 // import registerServiceWorker from './registerServiceWorker';
 
-class Title extends Component {
-    handleClickOnTitle (e) {
-      console.log(this)
-    }
-  
-    render () {
-      return (
-        <h1 onClick={this.handleClickOnTitle.bind(this)}>React 小书</h1>
-      )
+
+class LikeButton extends Component {
+  static defaultProps = {
+    likedText: '取消',
+    unlikedText: '点赞'
+  }
+  constructor () {
+    super()
+    this.state = { isLiked: false }
+  }
+
+  handleClickOnLikeButton () {
+    this.setState({
+      isLiked: !this.state.isLiked
+    })
+  }
+
+  render () {
+    return (
+      <button onClick={this.handleClickOnLikeButton.bind(this)}>
+        {this.state.isLiked
+          ? this.props.likedText
+          : this.props.unlikedText} 👍
+      </button>
+    )
+  }
+}
+class Index extends Component {
+  constructor () {
+    super()
+    this.state = {
+      likedText: '已赞',
+      unlikedText: '赞'
     }
   }
-  class Header extends Component {
-    render () {
-      return (
+  handleClickOnChange () {
+    this.setState({
+      likedText: '取消',
+      unlikedText: '点赞'
+    })
+  }
+
+  render () {
+    return (
       <div>
-        <Title />
-        <h2>This is Header</h2>
-      </div>
-      )
-    }
-  }
-  
-  class Main extends Component {
-    render () {
-      return (
-      <div>
-        <h2>This is main content</h2>
-      </div>
-      )
-    }
-  }
-  
-  class Footer extends Component {
-    render () {
-      return (
-      <div>
-        <h2>This is footer</h2>
-      </div>
-      )
-    }
-  }
-  
-  class Index extends Component {
-    render () {
-      return (
+        <LikeButton
+          likedText={this.state.likedText}
+          unlikedText={this.state.unlikedText} />
         <div>
-          <Header />
-          <Main />
-          <Footer />
+          <button onClick={this.handleClickOnChange.bind(this)}>
+            修改 wordings
+          </button>
         </div>
-      )
-    }
+      </div>
+    )
   }
-  
-  ReactDOM.render(
-    <Index />,
-    document.getElementById('root')
-  )
+}
+
+ReactDOM.render(
+  <Index />,
+  document.getElementById('root')
+)
 // registerServiceWorker();
 
 
@@ -88,3 +92,35 @@ class Title extends Component {
 //       )
 //     }
 //   }
+
+/**
+ *  不能摸的狗（二）
+ */
+// class Dog extends Component {
+//   constructor () {
+//     super ()
+//     this.state = {
+//       isRunning: false,
+//       isBarking: false
+//     }
+//   }
+//   bark () {
+//     console.log('bark')
+//     this.setState({ isBarking: true })
+//     setTimeout(() => this.setState({ isBarking: false }), 20)
+//   }
+//   run () {
+//     console.log('run')
+//     this.setState({ isRunning:true })
+//     setTimeout(() => this.setState({ isRunning: false }), 20)
+//   }
+//   handleClickOnDog () {
+//     this.bark()
+//     this.run()
+//   }
+//   render() {
+//     return (
+//       <div onClick={this.handleClickOnDog.bind(this)}>DOG</div>
+//     )
+//   }
+// }
