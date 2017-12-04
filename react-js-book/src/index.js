@@ -5,57 +5,12 @@ import './index.css';
 // import registerServiceWorker from './registerServiceWorker';
 
 
-class LikeButton extends Component {
-  static defaultProps = {
-    likedText: '取消',
-    unlikedText: '点赞'
-  }
-  constructor () {
-    super()
-    this.state = { isLiked: false }
-  }
-
-  handleClickOnLikeButton () {
-    this.setState({
-      isLiked: !this.state.isLiked
-    })
-  }
-
+class Card extends Component {
   render () {
     return (
-      <button onClick={this.handleClickOnLikeButton.bind(this)}>
-        {this.state.isLiked
-          ? this.props.likedText
-          : this.props.unlikedText} 👍
-      </button>
-    )
-  }
-}
-class Index extends Component {
-  constructor () {
-    super()
-    this.state = {
-      likedText: '已赞',
-      unlikedText: '赞'
-    }
-  }
-  handleClickOnChange () {
-    this.setState({
-      likedText: '取消',
-      unlikedText: '点赞'
-    })
-  }
-
-  render () {
-    return (
-      <div>
-        <LikeButton
-          likedText={this.state.likedText}
-          unlikedText={this.state.unlikedText} />
-        <div>
-          <button onClick={this.handleClickOnChange.bind(this)}>
-            修改 wordings
-          </button>
+      <div className='card'>
+        <div className='card-content'>
+          {this.props.children}
         </div>
       </div>
     )
@@ -63,9 +18,14 @@ class Index extends Component {
 }
 
 ReactDOM.render(
-  <Index />,
+  <Card>
+    <h2>React.js 小书</h2>
+    <div>开源、免费、专业、简单</div>
+    订阅：<input />
+  </Card>,
   document.getElementById('root')
 )
+
 // registerServiceWorker();
 
 
@@ -121,6 +81,35 @@ ReactDOM.render(
 //   render() {
 //     return (
 //       <div onClick={this.handleClickOnDog.bind(this)}>DOG</div>
+//     )
+//   }
+// }
+
+/**
+ * React.js 加载、刷新数据
+ */
+// class Post extends Component {
+//   constructor () {
+//     super()
+//     this.state = { content: '' }
+//   }
+//   componentWillMount () {
+//     this._loadData()
+//   }
+//   async _loadData () {
+//     this.setState({ content: '数据加载中...' })
+//     const content = await getPostData()
+//     this.setState({ content })
+//   }
+  
+//   render () {
+//     return (
+//       <div>
+//         <div className='post-content'>{this.state.content}</div>
+//         <button onClick={() => {
+//           this._loadData()
+//         }}>刷新</button>
+//       </div>
 //     )
 //   }
 // }
