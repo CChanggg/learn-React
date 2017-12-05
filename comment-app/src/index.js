@@ -6,4 +6,4 @@ import './index.css'
 ReactDOM.render(
   <CommentApp />,
   document.getElementById('root')
-)
+);
