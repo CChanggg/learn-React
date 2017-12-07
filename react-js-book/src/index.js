@@ -1,31 +1,23 @@
-import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-// import App from './App';
-// import registerServiceWorker from './registerServiceWorker';
+import React, { Component } from 'react'
 
+export default (WrappedComponent, name) => {
+  class NewComponent extends Component {
+    constructor () {
+      super()
+      this.state = { data: null }
+    }
 
-class Card extends Component {
-  render () {
-    return (
-      <div className='card'>
-        <div className='card-content'>
-          {this.props.children}
-        </div>
-      </div>
-    )
+    componentWillMount () {
+      let data = localStorage.getItem(name)
+      this.setState({ data })
+    }
+
+    render () {
+      return <WrappedComponent data={this.state.data} />
+    }
   }
-}
-
-ReactDOM.render(
-  <Card>
-    <h2>React.js 小书</h2>
-    <div>开源、免费、专业、简单</div>
-    订阅：<input />
-  </Card>,
-  document.getElementById('root')
-)
-
+  return NewComponent
+} 
 // registerServiceWorker();
 
 
